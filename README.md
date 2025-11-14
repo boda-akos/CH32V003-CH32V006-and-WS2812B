@@ -1,0 +1,12 @@
+Basic working of the WS2812B chip and LED chain:
+- Reset all chips by setting data line to low level for > 50 usec
+- Data bit 0 is coded as 0.4us H, 0.8us L
+- Data bit 1 is coded as 0.8us H, 0.4us L
+- Tolerance is 150 nsec, 8 bit per color 
+- String data is stored in array 3 bytes per chip
+- Send data chain, 24 bits per chip in GRB order
+- First chip fills its register with 24 bits, reshapes the data
+- First chip cuts off the first 24 bits, sends the rest down to chain
+- Repeated on all chips, the data will decrease in size as progresses
+- If all goes well, the last chip gets its 24 bits and the data stops
+- Data stops at low level, all chips wait 50us, reset, wait for new data
