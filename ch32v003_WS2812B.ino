@@ -20,7 +20,7 @@ typedef struct {
 #define WS_PINK (WS_Color){255, 20, 147}
 
 byte global_brightness=0x40;
-byte led_count=8;
+byte led_count=16;
 void WS_SetBrightness(byte brightness);
 void WS_SetPixel(byte index, WS_Color color);
 void WS_Fill(WS_Color color);
@@ -41,20 +41,17 @@ void setup() {
     while((RCC->CFGR0 & RCC_SWS) != RCC_SWS_PLL); // Wait for switch
 */
 pinMode(PC4, OUTPUT);
-        // Fill all LEDs with red
+        // Fill all LEDs 
         WS_Fill(WS_BLACK);
-        WS_Show(); delay(1000); // Set individual LED colors
-        WS_SetPixel(0, WS_RED);WS_SetPixel(1, WS_GREEN);WS_SetPixel(2, WS_BLUE);
-        WS_SetPixel(3, WS_CYAN);WS_SetPixel(4, WS_PURPLE);WS_SetPixel(5, WS_ORANGE);WS_SetPixel(6, WS_PURPLE);WS_SetPixel(7, WS_ORANGE);
         WS_Show();
-        //delay(5000);
-//while(1) {send_bit(1);}  //Oscilloscope waveform check 
-/*Serial.begin(9600); for(int i = 0; i < 255; i ++) Serial.println(i);//serial warmup
+    
+//while(1) {send_bit(0);}  //Oscilloscope waveform check 
+Serial.begin(9600); for(int i = 0; i < 255; i ++) Serial.println(i);//serial warmup
 Serial.println();
 Serial.println("Table");
 for (byte i=0; i<8; i++) {
 Serial.print(led_buffer[i].r);Serial.print("  "); Serial.print(led_buffer[i].g); Serial.print("  "); Serial.print(led_buffer[i].b);
-Serial.println(); }*/
+Serial.println(); }
 }
 
 
@@ -73,8 +70,10 @@ void loop(void) {
         WS_SetPixel(0, WS_RED);
         WS_SetPixel(1, WS_GREEN);
         WS_SetPixel(2, WS_BLUE);
+WS_SetPixel(3, WS_CYAN);WS_SetPixel(4, WS_PURPLE);WS_SetPixel(5, WS_ORANGE);WS_SetPixel(6, WS_PURPLE);WS_SetPixel(7, WS_ORANGE);        
+WS_SetPixel(8, WS_CYAN);WS_SetPixel(9, WS_PURPLE);WS_SetPixel(10, WS_ORANGE);WS_SetPixel(11, WS_PURPLE);WS_SetPixel(12, WS_ORANGE);
         WS_Show();
-        delay(2500);
+        delay(25000);
 
         // Create custom colors
         WS_Color purple = WS_RGB(128, 0, 128);
@@ -85,31 +84,31 @@ void loop(void) {
     }
 }
 
-static void send_bit(byte x) { 
+static void send_bit(byte x) { //this setup runs on 24Mhz internal clock, uncomment nop-s for more delay at 48MHz
     if (x) {// Send a 1 bit (high for 0.8us, low for 0.45us, tolerance 150usec)
         GPIOC->OUTDR |=(1<<4);  // Set high
  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop"); __asm__ volatile ("nop"); 
  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop"); __asm__ volatile ("nop"); 
- __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop"); __asm__ volatile ("nop"); 
+__asm__ volatile ("nop");  __asm__ volatile ("nop");  /* __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop"); __asm__ volatile ("nop"); 
  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop"); __asm__ volatile ("nop"); __asm__ volatile ("nop");  __asm__ volatile ("nop"); 
  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");
  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop"); 
-
+*/
          GPIOC->OUTDR &=~(1<<4);    // Set low 
- __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop"); __asm__ volatile ("nop"); 
+ __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop"); /*__asm__ volatile ("nop"); 
  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop"); __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop"); 
- __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop"); 
+ __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop"); */
         }
 else { // Send a 0 bit (high for 0.4us, low for 0.85us, tolerance 150usec)
          GPIOC->OUTDR |=(1<<4);   
- __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop"); __asm__ volatile ("nop"); 
- __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop"); 
+ __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  /*__asm__ volatile ("nop");  __asm__ volatile ("nop"); __asm__ volatile ("nop"); 
+ __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");*/ 
         GPIOC->OUTDR &=~(1<<4);  // Set low
  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop"); __asm__ volatile ("nop"); 
- __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop"); __asm__ volatile ("nop"); 
+ __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop"); __asm__ volatile ("nop");  __asm__ volatile ("nop");  /*__asm__ volatile ("nop"); 
  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop"); __asm__ volatile ("nop"); 
  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop"); 
- __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  
+ __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop"); */ 
 }  
 //GPIOC->OUTDR |=(1<<4); GPIOC->OUTDR &=~(1<<4); //Marker for oscilloscope waveform check
 }
