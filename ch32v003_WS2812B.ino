@@ -32,7 +32,7 @@ static WS_Color led_buffer[WS_MAX_LEDS];
 
 void setup() {
 
-/*  Uncomment this section with internal 24Mhz oscillator, to run on 48mhz
+/*  Uncomment this section with internal 24Mhz oscillator, to double the clock speed, to run on 48mhz
     RCC->CTLR |= RCC_PLLON;          // Enable PLL 48MHz 
     while(!(RCC->CTLR & RCC_PLLRDY)); // Wait for PLL lock
     RCC->CFGR0 |= 0;    // No clock division
