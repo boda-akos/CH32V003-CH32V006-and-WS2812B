@@ -32,8 +32,7 @@ static WS_Color led_buffer[WS_MAX_LEDS];
 
 void setup() {
 
-/*  This section used with PCBs without external quartz (internal 24Mhz oscillator) to run on 48mhz
-//Leave it commented (do not compile) to keep the 24MHz clock 
+/*  Uncomment this section with internal 24Mhz oscillator, to run on 48mhz
     RCC->CTLR |= RCC_PLLON;          // Enable PLL 48MHz 
     while(!(RCC->CTLR & RCC_PLLRDY)); // Wait for PLL lock
     RCC->CFGR0 |= 0;    // No clock division
@@ -41,7 +40,7 @@ void setup() {
     RCC->CFGR0 |= RCC_SW_PLL;         // Switch to PLL (48 MHz)
     while((RCC->CFGR0 & RCC_SWS) != RCC_SWS_PLL); // Wait for switch
 */
-pinMode(PC4, OUTPUT);
+pinMode(PC4, OUTPUT); //LED data pin
         // Fill all LEDs 
         WS_Fill(WS_BLACK);
         WS_Show();
@@ -74,7 +73,7 @@ void loop(void) {
 WS_SetPixel(3, WS_CYAN);WS_SetPixel(4, WS_PURPLE);WS_SetPixel(5, WS_ORANGE);WS_SetPixel(6, WS_PURPLE);WS_SetPixel(7, WS_ORANGE);        
 WS_SetPixel(8, WS_CYAN);WS_SetPixel(9, WS_PURPLE);WS_SetPixel(10, WS_ORANGE);WS_SetPixel(11, WS_PURPLE);WS_SetPixel(12, WS_ORANGE);
         WS_Show();
-        delay(25000);
+        delay(2500);
 
         // Create custom colors
         WS_Color purple = WS_RGB(128, 0, 128);
@@ -84,8 +83,10 @@ WS_SetPixel(8, WS_CYAN);WS_SetPixel(9, WS_PURPLE);WS_SetPixel(10, WS_ORANGE);WS_
 
     }
 }
-
-static void send_bit(byte x) { //this setup runs on 24Mhz internal clock, uncomment nop-s for more delay at 48MHz
+    //this setup runs on 24Mhz internal clock, uncomment nop-s for more delay at 48MHz
+    //The internal oscillator is accurate enough to remain inside WS2812 timing tolerances
+    //However if the colors are not good, add or remove _nop_ delays, check timing owith oscilloscope
+static void send_bit(byte x) { 
     if (x) {// Send a 1 bit (high for 0.8us, low for 0.45us, tolerance 150usec)
         GPIOC->OUTDR |=(1<<4);  // Set high
  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop");  __asm__ volatile ("nop"); __asm__ volatile ("nop"); 
