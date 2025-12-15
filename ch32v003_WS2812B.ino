@@ -1,4 +1,4 @@
-
+// Runs on 24 or 48 MHz clock speed.
 // Maximum number of LEDs supported by the library
 #define WS_MAX_LEDS 256
 typedef struct {
@@ -32,7 +32,8 @@ static WS_Color led_buffer[WS_MAX_LEDS];
 
 void setup() {
 
-/*  This section used with PCBs with no external quartz (internal 24Mhz oscillator)
+/*  This section used with PCBs without external quartz (internal 24Mhz oscillator) to run on 48mhz
+//Leave it commented (do not compile) to keep the 24MHz clock 
     RCC->CTLR |= RCC_PLLON;          // Enable PLL 48MHz 
     while(!(RCC->CTLR & RCC_PLLRDY)); // Wait for PLL lock
     RCC->CFGR0 |= 0;    // No clock division
